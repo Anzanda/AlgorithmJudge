@@ -1,3 +1,5 @@
+package judge;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -31,13 +33,16 @@ public class Judge{
         Path solPipe = Paths.get(solPath);
         Path ansPipe = Paths.get(ansPath);
         List<String> solLines = Files.readAllLines(solPipe);
-        List<String> ansLines = Files.readAllLines(solPipe);
+        List<String> ansLines = Files.readAllLines(ansPipe);
 
         boolean flag = false;
         Iterator<String> sIter = solLines.iterator();
-        Iterator<String> aIter = solLines.iterator();
+        Iterator<String> aIter = ansLines.iterator();
         while(sIter.hasNext() && aIter.hasNext()){
-            if(sIter.next() != aIter.next()){
+            String sol = sIter.next();
+            String ans = aIter.next();
+            //System.out.println("sol: "+sol+" | ans: "+ans);
+            if(!sol.equals(ans)){
                 flag = true;
                 break;
             }

@@ -1,6 +1,10 @@
+package judge;
+
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
 import java.io.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
@@ -22,7 +26,7 @@ public class AdminCompiler extends Compiler{
 
     }
     @Override
-    void run() throws FileNotFoundException {
+    void run() throws FileNotFoundException, ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         setPath();
         PrintStream outputPrintStream = new PrintStream(new FileOutputStream(outputFile));
         System.setOut(outputPrintStream);
@@ -30,10 +34,18 @@ public class AdminCompiler extends Compiler{
 
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         compiler.run(System.in, System.out, null, sourceFile.getPath());
+        String tmpPath = "C:\\Users\\sunfl\\IdeaProjects\\AlgorithmJudge\\src\\judge\\AdminCompiler.java";
+        File tmp =new File(tmpPath);
+        compiler.run(null, null, null, tmp.getPath());
 
-        Answer ans = new Answer();
-        Answer.solve();
+        AdminCompiler tmpcomp = new AdminCompiler(sourceCode, fileIdx);
+        tmpcomp.solve();
     }
+    void solve(){
+        Answer ans = new Answer();
+        //ans.solve();
+    }
+
     @Override
     void setPath(){
 
@@ -46,7 +58,7 @@ public class AdminCompiler extends Compiler{
             outputTxt = "output.txt";
         }
 
-        sourcePath = "C:\\Users\\sunfl\\IdeaProjects\\AlgorithmJudge\\src\\Answer.java";
+        sourcePath = "C:\\Users\\sunfl\\IdeaProjects\\AlgorithmJudge\\src\\judge\\Answer.java";
         inputPath = rootPath+"\\admin\\input\\"+inputTxt;
         outputPath = rootPath+"\\admin\\output\\"+outputTxt;
 

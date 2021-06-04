@@ -1,3 +1,5 @@
+package judge;
+
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
 import java.io.File;
@@ -50,8 +52,8 @@ public class DirManagement {
         setClass();
     }
 
-    void resetDir(){
-        deleteFile(rootPath);
+    void resetDir(String path){
+        deleteFile(path);
     }
     public static void deleteFile(String path) {
         File deleteFolder = new File(path);

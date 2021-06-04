@@ -1,3 +1,6 @@
+package judge;
+
+import javax.swing.*;
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
 import java.io.*;
@@ -6,17 +9,17 @@ import java.nio.file.Files;
 
 public class UserCompiler extends Compiler{
     private String sourceCode;
-    private final int fileIdx;
+    private int fileIdx;
     private String inputPath;
     private String outputPath;
-    private String sourcePath;
+    private String sourcePath = "C:\\Users\\sunfl\\IdeaProjects\\AlgorithmJudge\\src\\Solution.java";
     private File sourceFile;
-    private File inputFile;
     private File outputFile;
-    UserCompiler(String sourceCode, int idx){
+
+    UserCompiler(String sourceCode, int fileIdx) throws FileNotFoundException {
         super();
-        this.fileIdx = idx;
         this.sourceCode = sourceCode.replaceFirst("public static void main\\(String\\[\\] args\\)", "public static void solve()");
+        this.fileIdx = fileIdx;
     }
     @Override
     void run() throws FileNotFoundException {
@@ -25,8 +28,8 @@ public class UserCompiler extends Compiler{
         System.setOut(outputPrintStream);
         System.setIn(new FileInputStream(inputPath));
 
-        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-        compiler.run(System.in, System.out, null, sourceFile.getPath());
+        JavaCompiler user = ToolProvider.getSystemJavaCompiler();
+        user.run(System.in, System.out, null, sourceFile.getPath());
 
         Solution sol = new Solution();
         sol.solve();
@@ -46,14 +49,12 @@ public class UserCompiler extends Compiler{
             outputTxt = "output.txt";
         }
 
-        sourcePath = "C:\\Users\\sunfl\\IdeaProjects\\AlgorithmJudge\\src\\Solution.java";
         inputPath = rootPath+"\\admin\\input\\"+inputTxt;
         outputPath = rootPath+"\\user\\output\\"+outputTxt;
 
 
         root = new File(rootPath);
         sourceFile = new File(sourcePath);
-        inputFile = new File(inputPath);
         outputFile = new File(outputPath);
 
         sourceFile.getParentFile().mkdirs();
