@@ -5,50 +5,54 @@ import javax.tools.ToolProvider;
 import java.io.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.nio.Buffer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
 
 public class AdminCompiler extends Compiler{
     private String sourceCode;
-    private final int fileIdx;
+    private int fileIdx;
     private String inputPath;
     private String outputPath;
-    private String sourcePath;
+    private final String sourcePath= rootPath+"\\Answer.java";;
     private File sourceFile;
     private File inputFile;
     private File outputFile;
     private String inputTxt;
     private String outputTxt;
-    AdminCompiler(String sourceCode, int idx) {
+    AdminCompiler() {
         super();//super class constructor 수정해야함!
-        this.fileIdx = idx;
-        this.sourceCode = sourceCode.replaceFirst("public static void main\\(String\\[\\] args\\)", "public static void solve()");
 
     }
     @Override
-    void run() throws FileNotFoundException, ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
-        setPath();
+    void run(int i) throws FileNotFoundException, ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException, MalformedURLException {
+        setPath(i);
         PrintStream outputPrintStream = new PrintStream(new FileOutputStream(outputFile));
         System.setOut(outputPrintStream);
         System.setIn(new FileInputStream(inputPath));
 
-        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-        compiler.run(System.in, System.out, null, sourceFile.getPath());
-        String tmpPath = "C:\\Users\\sunfl\\IdeaProjects\\AlgorithmJudge\\src\\judge\\AdminCompiler.java";
-        File tmp =new File(tmpPath);
-        compiler.run(null, null, null, tmp.getPath());
+        //String Url = "file:\\"+rootPath+"\\source\\Answer.java";
+        File classRepo = new File("C:\\Users\\sunfl\\IdeaProjects\\AlgorithmJudge\\src");
+        URL[] classLoaderUrls = new URL[]{classRepo.toURI().toURL()};
 
-        AdminCompiler tmpcomp = new AdminCompiler(sourceCode, fileIdx);
-        tmpcomp.solve();
-    }
-    void solve(){
-        Answer ans = new Answer();
-        //ans.solve();
+        URLClassLoader urlClassLoader = new URLClassLoader(classLoaderUrls);
+        Class<?> ansClass = urlClassLoader.loadClass("source.Answer");
+//        Constructor<?> constructor = ansClass.getConstructor();
+        Object ansObj = ansClass.newInstance();
+        Method method = ansClass.getMethod("solve");
+        method.invoke(ansObj);
     }
 
     @Override
-    void setPath(){
-
+    void setPath(int i){
+        fileIdx = i;
         if(fileIdx != 0){
             inputTxt = "input"+fileIdx+".txt";//set input TextFile format like input1.txt input2.txx ...!
             outputTxt = "output"+fileIdx+".txt";//set output TextFile format ...!
@@ -58,7 +62,6 @@ public class AdminCompiler extends Compiler{
             outputTxt = "output.txt";
         }
 
-        sourcePath = "C:\\Users\\sunfl\\IdeaProjects\\AlgorithmJudge\\src\\judge\\Answer.java";
         inputPath = rootPath+"\\admin\\input\\"+inputTxt;
         outputPath = rootPath+"\\admin\\output\\"+outputTxt;
 
@@ -67,17 +70,19 @@ public class AdminCompiler extends Compiler{
         sourceFile = new File(sourcePath);
         inputFile = new File(inputPath);
         outputFile = new File(outputPath);
-
-        sourceFile.getParentFile().mkdirs();
-        try{
-            Files.write(sourceFile.toPath(), sourceCode.getBytes(StandardCharsets.UTF_8));
-        } catch (IOException e){
-            e.printStackTrace();
-        }
     }
     void makeInputTxt(String input) throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile));
         writer.write(input);
         writer.close();
+    }
+    String getSourceCode() throws IOException {
+        sourceCode = "";
+        Path path = Paths.get(sourcePath);
+        List<String> lines = Files.readAllLines(path);
+        for(String line: lines){
+            sourceCode += line+"%n";
+        }
+        return sourceCode;
     }
 }

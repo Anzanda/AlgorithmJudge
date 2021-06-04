@@ -12,7 +12,7 @@ import java.util.List;
 public class Judge{
     String solPath;
     String ansPath;
-    protected final String rootPath = "c:\\judge!_@(#!)%("; //use special character like !_@(#!)% to void to effect original file!public File root;
+    protected final String rootPath = "c:\\judge_"; //use special character like !_@(#!)% to void to effect original file!public File root;
     Judge(){}
 
     boolean judgeTestCase(int i) throws IOException {

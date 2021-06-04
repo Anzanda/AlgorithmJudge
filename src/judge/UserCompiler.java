@@ -4,42 +4,52 @@ import javax.swing.*;
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
 import java.io.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
 
 public class UserCompiler extends Compiler{
     private String sourceCode;
     private int fileIdx;
     private String inputPath;
     private String outputPath;
-    private String sourcePath = "C:\\Users\\sunfl\\IdeaProjects\\AlgorithmJudge\\src\\Solution.java";
+    private final String sourcePath = rootPath + "\\Solution.java";
     private File sourceFile;
     private File outputFile;
 
     UserCompiler(String sourceCode, int fileIdx) throws FileNotFoundException {
         super();
-        this.sourceCode = sourceCode.replaceFirst("public static void main\\(String\\[\\] args\\)", "public static void solve()");
-        this.fileIdx = fileIdx;
     }
+
     @Override
-    void run() throws FileNotFoundException {
-        setPath();
+    void run(int i) throws FileNotFoundException, MalformedURLException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        setPath(i);
         PrintStream outputPrintStream = new PrintStream(new FileOutputStream(outputFile));
         System.setOut(outputPrintStream);
         System.setIn(new FileInputStream(inputPath));
 
-        JavaCompiler user = ToolProvider.getSystemJavaCompiler();
-        user.run(System.in, System.out, null, sourceFile.getPath());
+        File classRepo = new File("C:\\Users\\sunfl\\IdeaProjects\\AlgorithmJudge\\src");
+        URL[] classLoaderUrls = new URL[]{classRepo.toURI().toURL()};
+        URLClassLoader urlClassLoader = new URLClassLoader(classLoaderUrls);
 
-        Solution sol = new Solution();
-        sol.solve();
-
+        Class<?> solClass = urlClassLoader.loadClass("source.Solution");
+        Object solObj = solClass.newInstance();
+        Method method = solClass.getMethod("solve");
+        method.invoke(solObj);
     }
     @Override
-    void setPath(){
+    void setPath(int i){
         String inputTxt;
         String outputTxt;
-
+        fileIdx = i;
         if(fileIdx != 0){
             inputTxt = "input"+fileIdx+".txt";//set input TextFile format like input1.txt input2.txx ...!
             outputTxt = "output"+fileIdx+".txt";//set output TextFile format ...!
@@ -56,13 +66,15 @@ public class UserCompiler extends Compiler{
         root = new File(rootPath);
         sourceFile = new File(sourcePath);
         outputFile = new File(outputPath);
-
-        sourceFile.getParentFile().mkdirs();
-        try{
-            Files.write(sourceFile.toPath(), sourceCode.getBytes(StandardCharsets.UTF_8));
-        } catch (IOException e){
-            e.printStackTrace();
-        }
     }
 
+    String getSourceCode() throws IOException {
+        sourceCode = "";
+        Path path = Paths.get(sourcePath);
+        List<String> lines = Files.readAllLines(path);
+        for(String line: lines){
+            sourceCode += line+"%n";
+        }
+        return sourceCode;
+    }
 }

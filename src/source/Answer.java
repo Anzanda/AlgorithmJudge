@@ -1,9 +1,9 @@
-package judge;
+package source;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-class Answer {
-    public static void main(){
+public class Answer {
+    public static void solve(){
         Scanner scan = new Scanner(System.in);
         int n = scan.nextInt();
         ArrayList<Integer> arr = new ArrayList<Integer>();
