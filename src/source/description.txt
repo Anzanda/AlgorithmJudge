@@ -1,8 +1,8 @@
-문제
-N개의 정수가 주어진다. 이때, 최솟값과 최댓값을 구하는 프로그램을 작성하시오.
+-problem
+N integers are given. At this time, write a program to find the minimum and maximum values.
 
-입력
-첫째 줄에 정수의 개수 N (1 ≤ N ≤ 1,000,000)이 주어진다. 둘째 줄에는 N개의 정수를 공백으로 구분해서 주어진다. 모든 정수는 -1,000,000보다 크거나 같고, 1,000,000보다 작거나 같은 정수이다.
+-Input
+The first line is given the number of integers N (1 ≤ N ≤ 1,000,000). The second line is given N integers separated by spaces. All integers are integers greater than or equal to -1,000,000 and less than or equal to 1,000,000.
 
-출력
-첫째 줄에 주어진 정수 N개의 최솟값과 최댓값을 공백으로 구분해 출력한다.
+-Output
+The minimum and maximum values of N integers given in the first line are separated by spaces

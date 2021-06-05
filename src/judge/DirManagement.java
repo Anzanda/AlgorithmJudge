@@ -1,10 +1,7 @@
 package judge;
 
-import javax.tools.JavaCompiler;
-import javax.tools.ToolProvider;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -14,37 +11,38 @@ public class DirManagement {
     protected final String rootPath = "c:\\judge_"; //use special character like !_@(#!)% to void to effect original file!public File root;
     private String adminInputPath = rootPath+"\\admin\\input";
     private String adminOutputPath = rootPath+"\\admin\\output";
+    private String userOutputPath = rootPath + "\\user\\output";
     private String sourcePath = "C:\\Users\\sunfl\\IdeaProjects\\AlgorithmJudge\\src\\source\\";
+
+
     DirManagement(){
 
     }
 
+
     void init() throws IOException {
         setDir();
-        getNumOfTestCase();
     }
-    void setDir(){
-        File adminInputFile = new File(rootPath+"\\admin\\input");
-        File adminOutputFile = new File(rootPath+"\\admin\\output");
-        File userOutputFile = new File(rootPath + "\\user\\output");
+    void setDir(){//admin input/output and user ouput directory setting!!
+        //to void file exception!
+        File adminInputFile = new File(adminInputPath);
+        File adminOutputFile = new File(adminOutputPath);
+        File userOutputFile = new File(userOutputPath);
         adminInputFile.mkdirs();
         adminOutputFile.mkdirs();
         userOutputFile.mkdirs();
     }
-    void reset(){
-        resetDir(rootPath+"\\admin\\input");
-        resetDir(rootPath+"\\admin\\output");
+
+
+    void reset() throws IOException {
+        //Resetting TestCase means that admin's input/output is no longer needed.
+        resetDir(adminInputPath);
+        resetDir(adminOutputPath);
+        System.out.println("sibal");
+//        init();
     }
     void resetDir(String path) {
         deleteFile(path);
-    }
-    int getNumOfTestCase(){
-        return countDir(adminInputPath);
-    }
-    int countDir(String path){
-        File textFolder = new File(path);
-        File[] textFileList = textFolder.listFiles();
-        return textFileList.length;
     }
     public static void deleteFile(String path) {
         File deleteFolder = new File(path);
@@ -56,13 +54,15 @@ public class DirManagement {
                 if(deleteFolderList[i].isFile()) {
                     deleteFolderList[i].delete();
                 }else {
-                    deleteFile(deleteFolderList[i].getPath());
+                    deleteFile(deleteFolderList[i].getPath());//recursive call is used.
                 }
                 deleteFolderList[i].delete();
             }
             deleteFolder.delete();
         }
     }
+
+
     String getSourceText(String what) throws IOException {
         String retString = "";
         Path filePath = Paths.get(sourcePath+what);
@@ -71,6 +71,16 @@ public class DirManagement {
             retString += line+"\n";
         }
         return retString;
+    }
+
+
+    int countDir(String path){
+        File textFolder = new File(path);
+        File[] textFileList = textFolder.listFiles();
+        return textFileList.length;
+    }
+    int getNumOfTestCase(){
+        return countDir(adminInputPath);
     }
 
 }

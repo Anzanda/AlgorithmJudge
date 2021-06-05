@@ -1,8 +1,6 @@
 package judge;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -12,14 +10,15 @@ import java.util.List;
 public class Judge{
     String solPath;
     String ansPath;
-    protected final String rootPath = "c:\\judge_"; //use special character like !_@(#!)% to void to effect original file!public File root;
+    protected final String rootPath = "c:\\judge_";
     Judge(){}
 
     boolean judgeTestCase(int i) throws IOException {
+        /* First, we have to set path! */
         String solTxt;
         String ansTxt;
         if(i != 0){
-            solTxt = "output"+i+".txt";
+            solTxt = "output"+i+".txt";//cause output files are named that output.txt, output1.txt, output2.txt . . .
             ansTxt = "output"+i+".txt";
         }
         else{
@@ -32,6 +31,8 @@ public class Judge{
 
         Path solPipe = Paths.get(solPath);
         Path ansPipe = Paths.get(ansPath);
+
+        /* Second, read textFiles in our paths */
         List<String> solLines = Files.readAllLines(solPipe);
         List<String> ansLines = Files.readAllLines(ansPipe);
 
@@ -41,13 +42,13 @@ public class Judge{
         while(sIter.hasNext() && aIter.hasNext()){
             String sol = sIter.next();
             String ans = aIter.next();
-            //System.out.println("sol: "+sol+" | ans: "+ans);
-            if(!sol.equals(ans)){
+            if(!sol.equals(ans)){//ans and sol is different is failed!
                 flag = true;
                 break;
             }
         }
         if(sIter.hasNext() || aIter.hasNext()){
+            //different of line number means not equal
             flag = true;
         }
 

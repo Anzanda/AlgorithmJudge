@@ -22,6 +22,6 @@ public class Solution {
             }
         }
         System.out.println(max);
-        System.out.println(min+1);
+        System.out.println(min);
     }
 }
