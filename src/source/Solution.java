@@ -2,7 +2,7 @@ package source;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-class Solution {
+public class Solution {
     public static void solve(){
         Scanner scan = new Scanner(System.in);
         int n = scan.nextInt();

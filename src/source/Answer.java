@@ -22,6 +22,6 @@ public class Answer {
             }
         }
         System.out.println(max);
-        System.out.println(min);
+        System.out.println(min+1);
     }
 }

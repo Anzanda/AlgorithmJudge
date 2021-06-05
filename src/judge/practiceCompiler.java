@@ -46,7 +46,10 @@ public class practiceCompiler {
         for(int i=0; i<n; i++){
             admin.run(i);
         }
-
+        UserCompiler user = new UserCompiler();
+        for(int i=0; i<n; i++){
+            user.run(i);
+        }
 
     }
 }

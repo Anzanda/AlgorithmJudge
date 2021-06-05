@@ -21,16 +21,19 @@ public class UserCompiler extends Compiler{
     private int fileIdx;
     private String inputPath;
     private String outputPath;
-    private final String sourcePath = rootPath + "\\Solution.java";
+    private final String sourcePath = "C:\\Users\\sunfl\\IdeaProjects\\AlgorithmJudge\\src\\source";
     private File sourceFile;
     private File outputFile;
 
-    UserCompiler(String sourceCode, int fileIdx) throws FileNotFoundException {
+    UserCompiler() throws FileNotFoundException {
         super();
     }
 
     @Override
     void run(int i) throws FileNotFoundException, MalformedURLException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        InputStream originalIn = System.in;
+        PrintStream originalOut = System.out;
+
         setPath(i);
         PrintStream outputPrintStream = new PrintStream(new FileOutputStream(outputFile));
         System.setOut(outputPrintStream);
@@ -38,12 +41,16 @@ public class UserCompiler extends Compiler{
 
         File classRepo = new File("C:\\Users\\sunfl\\IdeaProjects\\AlgorithmJudge\\src");
         URL[] classLoaderUrls = new URL[]{classRepo.toURI().toURL()};
-        URLClassLoader urlClassLoader = new URLClassLoader(classLoaderUrls);
 
-        Class<?> solClass = urlClassLoader.loadClass("source.Solution");
-        Object solObj = solClass.newInstance();
-        Method method = solClass.getMethod("solve");
-        method.invoke(solObj);
+        URLClassLoader urlClassLoader = new URLClassLoader(classLoaderUrls);
+        Class<?> ansClass = urlClassLoader.loadClass("source.Solution");
+//        Constructor<?> constructor = ansClass.getConstructor();
+        Object ansObj = ansClass.newInstance();
+        Method method = ansClass.getMethod("solve");
+        method.invoke(ansObj);
+        System.setIn(originalIn);
+        System.setOut(originalOut);
+
     }
     @Override
     void setPath(int i){
@@ -70,11 +77,12 @@ public class UserCompiler extends Compiler{
 
     String getSourceCode() throws IOException {
         sourceCode = "";
-        Path path = Paths.get(sourcePath);
+        Path path = Paths.get(sourcePath+"\\Solution.java");
         List<String> lines = Files.readAllLines(path);
         for(String line: lines){
-            sourceCode += line+"%n";
+            sourceCode += line+"\n";
         }
+
         return sourceCode;
     }
 }

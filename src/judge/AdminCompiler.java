@@ -21,7 +21,7 @@ public class AdminCompiler extends Compiler{
     private int fileIdx;
     private String inputPath;
     private String outputPath;
-    private final String sourcePath= rootPath+"\\Answer.java";;
+    private final String sourcePath= "C:\\Users\\sunfl\\IdeaProjects\\AlgorithmJudge\\src\\source";
     private File sourceFile;
     private File inputFile;
     private File outputFile;
@@ -33,6 +33,9 @@ public class AdminCompiler extends Compiler{
     }
     @Override
     void run(int i) throws FileNotFoundException, ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException, MalformedURLException {
+        InputStream originalIn = System.in;
+        PrintStream originalOut = System.out;
+
         setPath(i);
         PrintStream outputPrintStream = new PrintStream(new FileOutputStream(outputFile));
         System.setOut(outputPrintStream);
@@ -48,6 +51,8 @@ public class AdminCompiler extends Compiler{
         Object ansObj = ansClass.newInstance();
         Method method = ansClass.getMethod("solve");
         method.invoke(ansObj);
+        System.setIn(originalIn);
+        System.setOut(originalOut);
     }
 
     @Override
@@ -78,10 +83,10 @@ public class AdminCompiler extends Compiler{
     }
     String getSourceCode() throws IOException {
         sourceCode = "";
-        Path path = Paths.get(sourcePath);
+        Path path = Paths.get(sourcePath+"\\Answer.java");
         List<String> lines = Files.readAllLines(path);
         for(String line: lines){
-            sourceCode += line+"%n";
+            sourceCode += line+"\n";
         }
         return sourceCode;
     }
