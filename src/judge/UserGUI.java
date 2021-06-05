@@ -20,6 +20,7 @@ public class UserGUI extends JPanel {
 	private int numberOfTestCase;
 	private PrintStream originalOut = System.out;
 	private UserCompiler user = new UserCompiler();
+	private DirManagement dir = new DirManagement();
 	/**
 	 * Launch the application.
 	 */
@@ -53,14 +54,7 @@ public class UserGUI extends JPanel {
 		descriptionTitlePanel.add(descriptionTitleLabel);
 		
 		JTextPane descriptionField = new JTextPane();
-		descriptionField.setText("문제\r\n"
-				+ "N개의 정수가 주어진다. 이때, 최솟값과 최댓값을 구하는 프로그램을 작성하시오.\r\n"
-				+ "\r\n"
-				+ "입력\r\n"
-				+ "첫째 줄에 정수의 개수 N (1 ≤ N ≤ 1,000,000)이 주어진다. 둘째 줄에는 N개의 정수를 공백으로 구분해서 주어진다. 모든 정수는 -1,000,000보다 크거나 같고, 1,000,000보다 작거나 같은 정수이다.\r\n"
-				+ "\r\n"
-				+ "출력\r\n"
-				+ "첫째 줄에 주어진 정수 N개의 최솟값과 최댓값을 공백으로 구분해 출력한다.");
+		descriptionField.setText(dir.getSourceText("description.txt"));
 		descriptionPane.setViewportView(descriptionField);
 		
 		JScrollPane inputPane = new JScrollPane();
@@ -78,8 +72,7 @@ public class UserGUI extends JPanel {
 		
 		JTextArea inputField = new JTextArea();
 		inputPane.setViewportView(inputField);
-		inputField.setText("5\r\n"
-				+ "20 10 35 30 7");
+		inputField.setText(dir.getSourceText("input.txt"));
 		
 		JScrollPane outputPane = new JScrollPane();
 		outputPane.setBounds(10, 515, 286, 98);
@@ -96,7 +89,7 @@ public class UserGUI extends JPanel {
 		
 		JTextArea outputField = new JTextArea();
 		outputPane.setViewportView(outputField);
-		outputField.setText("7 35");
+		outputField.setText(dir.getSourceText("output.txt"));
 		
 		JScrollPane codePane = new JScrollPane();
 		codePane.setBounds(321, 73, 524, 552);
@@ -111,7 +104,7 @@ public class UserGUI extends JPanel {
 		JButton submitBtn = new JButton("Submit");
 		submitBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				start();
+				startJudge();
 			}
 		});
 		submitBtn.setFont(new Font("Dialog", Font.ITALIC, 12));
@@ -136,7 +129,7 @@ public class UserGUI extends JPanel {
 		add(subtitleLabel);
 	}
 
-	void start(){
+	void startJudge(){
 		SwingWorker<Boolean, Integer> worker = new SwingWorker<Boolean, Integer>() {
 			@Override
 			protected Boolean doInBackground() throws Exception {

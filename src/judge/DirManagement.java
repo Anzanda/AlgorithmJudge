@@ -6,11 +6,15 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
 
 public class DirManagement {
     protected final String rootPath = "c:\\judge_"; //use special character like !_@(#!)% to void to effect original file!public File root;
     private String adminInputPath = rootPath+"\\admin\\input";
     private String adminOutputPath = rootPath+"\\admin\\output";
+    private String sourcePath = "C:\\Users\\sunfl\\IdeaProjects\\AlgorithmJudge\\src\\source\\";
     DirManagement(){
 
     }
@@ -59,4 +63,14 @@ public class DirManagement {
             deleteFolder.delete();
         }
     }
+    String getSourceText(String what) throws IOException {
+        String retString = "";
+        Path filePath = Paths.get(sourcePath+what);
+        List<String> lines = Files.readAllLines(filePath);
+        for(String line: lines){
+            retString += line+"\n";
+        }
+        return retString;
+    }
+
 }

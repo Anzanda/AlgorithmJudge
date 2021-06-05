@@ -75,7 +75,7 @@ public class AdminGUI extends JPanel {
 		inputSubmitBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				start();
+				makeTestCase();
 			}
 		});
 		inputSubmitBtn.setFont(new Font("Dialog", Font.ITALIC, 12));
@@ -111,7 +111,7 @@ public class AdminGUI extends JPanel {
 		resetBtn.setBounds(491, 24, 114, 40);
 		add(resetBtn);
 	}
-	void start(){
+	void makeTestCase(){
 		SwingWorker<Boolean, Integer> worker = new SwingWorker<Boolean, Integer>() {
 			@Override
 			protected Boolean doInBackground() throws Exception {
