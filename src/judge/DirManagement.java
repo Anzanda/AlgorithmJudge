@@ -8,14 +8,16 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
 public class DirManagement {
-    protected final String rootPath = "c:\\judge!_@(#!)%("; //use special character like !_@(#!)% to void to effect original file!public File root;
+    protected final String rootPath = "c:\\judge_"; //use special character like !_@(#!)% to void to effect original file!public File root;
+    private String adminInputPath = rootPath+"\\admin\\input";
+    private String adminOutputPath = rootPath+"\\admin\\output";
     DirManagement(){
 
     }
 
     void init() throws IOException {
         setDir();
-        setClass();
+        getNumOfTestCase();
     }
     void setDir(){
         File adminInputFile = new File(rootPath+"\\admin\\input");
@@ -25,35 +27,20 @@ public class DirManagement {
         adminOutputFile.mkdirs();
         userOutputFile.mkdirs();
     }
-    void setClass() throws IOException {
-        String solPath = "C:\\Users\\sunfl\\IdeaProjects\\AlgorithmJudge\\src\\Solution.java";
-        String ansPath = "C:\\Users\\sunfl\\IdeaProjects\\AlgorithmJudge\\src\\Answer.java";
-
-        String solCode ="class Solution {\n" +
-                "    public static void solve(){\n" +
-                "        \n" +
-                "    }\n" +
-                "}";
-        String ansCode = "class Answer {\n" +
-                "    public static void solve(){\n" +
-                "\n" +
-                "    }\n" +
-                "}\n";
-        File solFile = new File(solPath);
-        File ansFile = new File(ansPath);
-        Files.write(solFile.toPath(), solCode.getBytes(StandardCharsets.UTF_8));
-        Files.write(ansFile.toPath(), ansCode.getBytes(StandardCharsets.UTF_8));
-
-        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-        compiler.run(null, null, null, solFile.getPath());
-        compiler.run(null, null, null, ansFile.getPath());
+    void reset(){
+        resetDir(rootPath+"\\admin\\input");
+        resetDir(rootPath+"\\admin\\output");
     }
-    void resetCode() throws IOException {
-        setClass();
-    }
-
-    void resetDir(String path){
+    void resetDir(String path) {
         deleteFile(path);
+    }
+    int getNumOfTestCase(){
+        return countDir(adminInputPath);
+    }
+    int countDir(String path){
+        File textFolder = new File(path);
+        File[] textFileList = textFolder.listFiles();
+        return textFileList.length;
     }
     public static void deleteFile(String path) {
         File deleteFolder = new File(path);

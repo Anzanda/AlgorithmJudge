@@ -27,6 +27,7 @@ public class AdminCompiler extends Compiler{
     private File outputFile;
     private String inputTxt;
     private String outputTxt;
+    private DirManagement dir = new DirManagement();
     AdminCompiler() {
         super();//super class constructor 수정해야함!
 
@@ -76,18 +77,22 @@ public class AdminCompiler extends Compiler{
         inputFile = new File(inputPath);
         outputFile = new File(outputPath);
     }
-    void makeInputTxt(String input) throws IOException {
+    void makeInputTxt(String input,int i) throws IOException {
+        setPath(i);
         BufferedWriter writer = new BufferedWriter(new FileWriter(inputFile));
         writer.write(input);
         writer.close();
     }
     String getSourceCode() throws IOException {
         sourceCode = "";
-        Path path = Paths.get(sourcePath+"\\Answer.java");
+        Path path = Paths.get(sourcePath + "\\Answer.java");
         List<String> lines = Files.readAllLines(path);
-        for(String line: lines){
-            sourceCode += line+"\n";
+        for (String line : lines) {
+            sourceCode += line + "\n";
         }
         return sourceCode;
+    }
+    void reset(){
+        dir.reset();
     }
 }
